@@ -1,0 +1,10 @@
+version: '3.1'
+services:
+    hasher:
+        build: ./hasher
+        image: hasher
+    worker:
+        build: ./worker
+        image: worker
+        depends_on:
+            - hasher

@@ -1,4 +1,5 @@
 package com.docker.ddev.controller;
+
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,20 +11,41 @@ import com.docker.ddev.util.CustomErrorType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/utility/")
 public class UtilityController {
-    
+
     public static final Logger logger = LoggerFactory.getLogger(UtilityController.class);
-    
+
     Boolean unhealthy = false;
-    
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    @RequestMapping(value="/simulate-failure", method = RequestMethod.GET)
+    @RequestMapping(value = "/simulate-failure", method = RequestMethod.GET)
     public ResponseEntity<String> simulateFailure() {
         unhealthy = true;
         return new ResponseEntity<String>("OK", HttpStatus.OK);
+    }
+
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "/healthcheck", method = RequestMethod.GET)
+    public ResponseEntity<?> healthCheck() {
+        logger.info("Performing healthcheck");
+        if (unhealthy) {
+            return new ResponseEntity<Object>(new CustomErrorType("API unhealthy."), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        JSONObject healthcheck = new JSONObject();
+        try {
+            String sql = "SELECT to_char(current_timestamp, 'YYYY-MM-DD HH24:MI')";
+            String status = jdbcTemplate.queryForObject(sql, String.class);
+            healthcheck.put("status", status);
+        } catch (Exception e) {
+            logger.warn("An exception occurred while checking the database: {}", e);
+            return new ResponseEntity<Object>(new CustomErrorType("Database not responding."),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<JSONObject>(healthcheck, HttpStatus.OK);
     }
 }

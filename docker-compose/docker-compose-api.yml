@@ -16,19 +16,30 @@ services:
     secrets:
       - postgres_password
 
-  api:
+  apiserver:
     build:
        context: api
-       dockerfile: Dockerfile-dev
+       dockerfile: Dockerfile.api
     image: ddev_api
+    volumes:
+      - ./api:/usr/src/ddev
     ports:
       - "8080:8080"
       - "5005:5005"
     networks:
-      - front-tier
       - back-tier
     secrets:
       - postgres_password
+
+  watcher:
+    build: 
+      context: api
+      dockerfile: Dockerfile.api
+    volumes:
+      - ./api:/usr/src/ddev
+    command: mvn fizzed-watcher:run
+    networks:
+      - back-tier
 
 secrets:
   postgres_password:

@@ -1,17 +1,18 @@
 {
-    "name": "pets",
-    "version": "1.0.0",
-    "description": "UI for Pets App",
-    "main": "src/server.js",
-    "author": "Gabriel Schenker",
-    "license": "ISC",
-    "scripts": {
-        "start": "node src/server.js",
-        "test": "jasmine-node specs"
-    },
-    "dependencies": {
-        "express": "^4.14.1",
-        "mustache-express": "^1.2.4",
-        "request": "^2.81.0"
-    }
+  "name": "pets",
+  "version": "1.0.0",
+  "description": "UI for Pets App",
+  "main": "src/server.js",
+  "author": "Gabriel Schenker",
+  "license": "ISC",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "jasmine-node specs",
+    "test-watch": "jasmine-node specs --autotest --watch ./**/*.js"
+  },
+  "dependencies": {
+    "express": "^4.14.1",
+    "mustache-express": "^1.2.4",
+    "request": "^2.81.0"
+  }
 }

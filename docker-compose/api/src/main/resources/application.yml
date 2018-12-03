@@ -1,10 +1,9 @@
----
 server:
   port: 8080
   contextPath: /
 ---
 spring:
-  profiles: local, default
+  profiles: local
 datasource:
   ddev:
     url: jdbc:h2:~/test
@@ -20,7 +19,7 @@ datasource:
       dialect: org.hibernate.dialect.H2Dialect
 ---
 spring:
-  profiles: postgres
+  profiles: postgres, default
   devtools:
     remote:
       secret: secretkey
@@ -39,7 +38,7 @@ datasource:
     initialConnections: 20
     maxAge: 30000
     testOnBorrow: true
-    testWhileIdle:  true
+    testWhileIdle: true
     timeBetweenEvictionRunsMillis: 60000
     validationQuery: SELECT 1
     minPoolSize: 6
