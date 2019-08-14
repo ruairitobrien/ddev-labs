@@ -1,0 +1,9 @@
+version: "3.1"
+services:
+  sut:
+    build: .
+    volumes:
+      - ./src:/app/src
+    ports:
+      - "3000:3000"
+    command: nodemon ./src/server.js 0.0.0.0:3000
